@@ -7,8 +7,9 @@ if(POLICY CMP0116)
 endif()
 
 set(IMEX_EXTERNAL_PROJECT_BUILD OFF)
+project(IMEX LANGUAGES CXX C)
 
-if(NOT (CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR) AND NOT MLIR_BINARY_DIR)
+if(NOT(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR) AND NOT MLIR_BINARY_DIR)
     # Building as part of LLVM via the external project mechanism.
     set(IMEX_EXTERNAL_PROJECT_BUILD ON)
     list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules")
@@ -23,11 +24,10 @@ else()
     list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake/modules")
 endif()
 
-
 if(IMEX_EXTERNAL_PROJECT_BUILD)
     message(STATUS "Building IMEX with LLVM_EXTERNAL_PROJECTS")
-    set(MLIR_MAIN_SRC_DIR ${LLVM_MAIN_SRC_DIR}/../mlir )
-    set(MLIR_INCLUDE_DIR ${MLIR_MAIN_SRC_DIR}/include )
+    set(MLIR_MAIN_SRC_DIR ${LLVM_MAIN_SRC_DIR}/../mlir)
+    set(MLIR_INCLUDE_DIR ${MLIR_MAIN_SRC_DIR}/include)
     set(MLIR_GENERATED_INCLUDE_DIR ${LLVM_BINARY_DIR}/tools/mlir/include)
     include_directories(SYSTEM ${MLIR_INCLUDE_DIR})
     include_directories(SYSTEM ${MLIR_GENERATED_INCLUDE_DIR})
@@ -93,6 +93,7 @@ add_definitions(${LLVM_DEFINITIONS})
 set(LLVM_LIT_ARGS "-sv" CACHE STRING "lit default options")
 
 set(IMEX_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
+
 # LLVM_EXTERNAL_PROJECTS build puts library, executables and tools in LLVM's CMAKE_BINARY_DIR
 set(IMEX_BINARY_DIR ${CMAKE_BINARY_DIR})
 
@@ -107,11 +108,12 @@ set(IMEX_ENABLE_SYCL_RUNTIME 0 CACHE BOOL "Enable the Sycl Runtime")
 set(IMEX_ENABLE_L0_RUNTIME 0 CACHE BOOL "Enable the Level Zero Runtime")
 
 option(IMEX_INCLUDE_DOCS "Generate build targets for the IMEX docs." ON)
-if (IMEX_INCLUDE_DOCS)
-  add_subdirectory(docs)
+
+if(IMEX_INCLUDE_DOCS)
+    add_subdirectory(docs)
 endif()
 
-install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/mlir
+install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/imex
     DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
     COMPONENT mlir-headers
     FILES_MATCHING
